@@ -1,85 +1,260 @@
-# Showdown-Damage-Calculator-Webapp
 # Pokémon Damage Calculator
 
-A polished, self-contained web app version of the official [Smogon Damage Calculator](https://github.com/smogon/damage-calc). It runs the **exact `@smogon/calc` engine** (all 9 generations of game data) bundled directly into the page, wrapped in a modern UI with animated sprites, custom searchable dropdowns, and live battle visualizations.
+A modern, feature-rich web implementation of the official **Smogon Damage Calculator**, powered by the authentic **`@smogon/calc`** engine. This project combines the exact battle mechanics used by Smogon with a clean, responsive interface, animated battle visuals, and an intuitive user experience for competitive Pokémon players.
 
-![Pokémon Damage Calculator](preview.png)
-
----
-
-## ✨ Features
-
-### Accurate, official calculations
-- Powered by the real **`@smogon/calc`** library — the same engine behind Smogon's own calculator
-- Damage min–max rolls, percentages, and KO chances
-- The canonical result string, e.g. *"252 Atk Garchomp Earthquake vs. 252 HP / 252+ Def Toxapex: 176-210 (57.8 - 69%) -- guaranteed 2HKO"*
-- Type effectiveness (super effective / not very effective / immune) computed from the in-engine type chart
-- Supports **Generations 1–9** and both **Singles** and **Doubles**
-
-### Rich, searchable UI
-- **Custom dropdowns everywhere** with instant search/filter and keyboard navigation (↑/↓, Enter, Esc):
-  - **Pokémon** — each option shows a mini sprite + type dots
-  - **Moves** — type badge, category icon, and base power shown inline
-  - **Abilities, Items, Natures** (natures show their +/− stat), **Tera type**, **Status**, **Weather**, **Terrain**, **Generation**, **Game type**
-- **Animated sprites** from Pokémon Showdown (back sprite for the attacker, front for the defender) with automatic fallback to static / HOME sprites for newer Pokémon
-
-### Full battle configuration
-- Per Pokémon: **level, nature, ability, item, status, Tera type** (Gen 9), **EVs, IVs, and stat boosts** with live computed stats
-- **4 move slots** for the attacker
-- **Field conditions:** weather, terrain, gravity
-- **Side conditions:** Reflect, Light Screen, Aurora Veil, Tailwind, Helping Hand (per side)
-
-### Quality-of-life extras
-- **⇄ Swap** attacker and defender (including their side conditions)
-- **🎲 Random** Pokémon picker on each side
-- **Damage-roll sparkline** visualizing all 16 individual rolls per move
-- **📋 Copy** the official calc string to the clipboard
-- **Clear EVs** chip and toast notifications
-- **Animated battle stage** with attack lunge, hit shake/flash, and a draining HP bar
-- **Dark mode** (auto-detects your OS preference)
-- **Responsive** from 400 px mobile up to desktop
+> **Live Demo:** https://showdown-damage-calculator-webapp.onrender.com
 
 ---
 
-## 🚀 Usage
+## 📖 Overview
 
-This is a static web app — no server or build step required to run it.
+The **Pokémon Damage Calculator** is a completely client-side web application designed to accurately simulate Pokémon battles and calculate damage across every main-series generation.
 
-1. Open `index.html` in any modern browser (or open the exported `pokemon_damage_calculator.html` artifact directly).
-2. Pick an **attacker** and **defender**, configure their sets, add moves, and the damage results update live.
-3. Click a move card or move slot to replay the attack animation and update the defender's HP bar.
+Built around the official **`@smogon/calc`** library, the calculator supports **Generations I–IX**, Singles and Doubles formats, Terastallization, weather, terrain, status conditions, stat boosts, and numerous battle mechanics while remaining lightweight and easy to use.
 
-> **Note:** The damage engine is fully offline (bundled locally). An internet connection is only needed to load Pokémon **sprites** and the Tailwind CSS runtime.
+Unlike traditional calculators, this project emphasizes both **accuracy** and **user experience**, offering searchable dropdowns, animated sprites, live stat updates, damage visualizations, and an interface optimized for both desktop and mobile devices.
+
+Since everything runs directly in the browser, **no backend server is required**. Damage calculations are performed locally, providing instant results and allowing the application to function offline (excluding external sprite loading).
 
 ---
 
-## 📁 Project structure
+# ✨ Features
+
+## 🎯 Accurate Battle Calculations
+
+* Uses the official **`@smogon/calc`** engine
+* Supports **Generations I–IX**
+* Singles and Doubles battle formats
+* Official Smogon damage calculation logic
+* Accurate damage ranges and percentages
+* Guaranteed OHKO, 2HKO, 3HKO and KO chance calculations
+* Type effectiveness calculations
+* Critical hits
+* STAB and Terastallization
+* Weather and terrain modifiers
+* Burn, status, abilities and held item effects
+
+---
+
+## 🎮 Battle Configuration
+
+Configure nearly every battle parameter:
+
+### Pokémon
+
+* Species
+* Level
+* Ability
+* Held Item
+* Nature
+* Tera Type
+* Status Condition
+
+### Stats
+
+* EVs
+* IVs
+* Stat Boosts
+* Live stat calculation
+
+### Field Conditions
+
+* Weather
+* Terrain
+* Gravity
+
+### Side Conditions
+
+* Reflect
+* Light Screen
+* Aurora Veil
+* Tailwind
+* Helping Hand
+
+---
+
+## 🔍 Modern User Interface
+
+Designed to be fast and intuitive.
+
+### Searchable Dropdowns
+
+* Pokémon
+* Moves
+* Abilities
+* Items
+* Natures
+* Tera Types
+* Status Conditions
+* Weather
+* Terrain
+* Generation
+* Battle Format
+
+Each dropdown includes:
+
+* Instant search
+* Keyboard navigation
+* Type indicators
+* Category icons
+* Power information
+* Pokémon sprites
+
+---
+
+## 🎨 Interactive Battle Experience
+
+* Animated Pokémon Showdown sprites
+* Front and back battle sprites
+* Smooth attack animations
+* HP bar animation
+* Damage flash effects
+* Damage roll sparkline visualization
+* Live stat updates
+* Responsive layout
+* Automatic Dark Mode
+
+---
+
+## ⚡ Quality of Life Features
+
+* Swap attacker and defender
+* Random Pokémon generator
+* Copy official damage result
+* One-click EV reset
+* Toast notifications
+* Mobile-friendly interface
+* Keyboard shortcuts
+* Responsive design
+
+---
+
+# 🚀 Getting Started
+
+No installation or build process is required.
+
+Simply clone the repository and open **index.html** in any modern web browser.
+
+```bash
+git clone https://github.com/kathirvel2/Showdown-Damage-Calculator-Webapp.git
+cd Showdown-Damage-Calculator-Webapp
+```
+
+Open:
 
 ```
-pokecalc/
-├── index.html              # Page shell — loads Tailwind, styles, the engine, and the app
-├── styles.css              # All styling: type colors, animations, comboboxes, mobile rules
-├── app.js                  # Application logic: state, UI rendering, combobox engine, calc wiring
-└── smogon-calc.bundle.js   # The official @smogon/calc library bundled for the browser (all gens)
+index.html
 ```
 
----
+or visit the live deployment:
 
-## 🛠 Tech stack
-
-| Concern              | Choice                                                        |
-|----------------------|---------------------------------------------------------------|
-| Damage logic         | [`@smogon/calc`](https://www.npmjs.com/package/@smogon/calc) v0.11 (bundled with esbuild) |
-| UI rendering         | Vanilla JavaScript (no framework)                             |
-| Styling              | [Tailwind CSS](https://tailwindcss.com) (browser runtime) + custom CSS |
-| Sprites              | [Pokémon Showdown](https://play.pokemonshowdown.com/sprites/) sprite sets |
+**https://showdown-damage-calculator-webapp.onrender.com**
 
 ---
 
-## 🙏 Credits & licensing
+# 📁 Project Structure
 
-- **Damage engine:** [smogon/damage-calc](https://github.com/smogon/damage-calc) (`@smogon/calc`) — MIT License
-- **Sprites:** Pokémon Showdown
-- Pokémon and all related names are trademarks of Nintendo / Game Freak / The Pokémon Company. This project is a fan-made tool and is not affiliated with or endorsed by them.
+```
+Showdown-Damage-Calculator-Webapp
+│
+├── index.html
+├── styles.css
+├── app.js
+├── smogon-calc.bundle.js
+├── DOCUMENTATION.md
+├── LICENSE
+└── README.md
+```
 
-See `DOCUMENTATION.md` for technical/architecture details and instructions on rebuilding the engine bundle.
+| File                      | Description                                          |
+| ------------------------- | ---------------------------------------------------- |
+| **index.html**            | Main application entry point                         |
+| **styles.css**            | UI styling, animations and responsive layout         |
+| **app.js**                | Application logic and state management               |
+| **smogon-calc.bundle.js** | Browser bundle of the official `@smogon/calc` engine |
+| **DOCUMENTATION.md**      | Technical documentation and architecture             |
+
+---
+
+# 🛠 Technology Stack
+
+| Component     | Technology          |
+| ------------- | ------------------- |
+| Frontend      | HTML5               |
+| Styling       | CSS3 + Tailwind CSS |
+| Logic         | Vanilla JavaScript  |
+| Damage Engine | `@smogon/calc`      |
+| Bundler       | esbuild             |
+| Sprites       | Pokémon Showdown    |
+| Deployment    | Render Static Sites |
+
+---
+
+# 🌟 Highlights
+
+* ✅ 100% Client-side
+* ✅ No backend required
+* ✅ Accurate Smogon calculations
+* ✅ Fully responsive
+* ✅ Mobile friendly
+* ✅ Modern searchable interface
+* ✅ Animated battle simulation
+* ✅ Dark Mode support
+* ✅ Fast and lightweight
+
+---
+
+# 📚 Documentation
+
+Technical implementation details are available in:
+
+```
+DOCUMENTATION.md
+```
+
+It includes:
+
+* Architecture overview
+* State management
+* Damage engine integration
+* Rendering pipeline
+* Sprite handling
+* Build process
+* Developer notes
+
+---
+
+# 🤝 Contributing
+
+Contributions are welcome.
+
+If you'd like to improve the project:
+
+1. Fork the repository.
+2. Create a feature branch.
+3. Commit your changes.
+4. Open a Pull Request.
+
+Bug reports and feature requests are always appreciated.
+
+---
+
+# 📄 License
+
+This project is licensed under the **MIT License**.
+
+See the **LICENSE** file for more information.
+
+---
+
+# Credits
+
+### Smogon
+
+The damage calculation engine is powered by the excellent **`@smogon/calc`** project maintained by the Smogon community.
+
+### Pokémon
+
+Pokémon, Pokémon character names, game mechanics, artwork, and related intellectual property are trademarks and copyrights of Nintendo, Game Freak, and The Pokémon Company.
+
+This project is an independent fan-made application created for educational and competitive gameplay purposes and is **not affiliated with, endorsed by, or sponsored by Nintendo, Game Freak, The Pokémon Company, or Smogon.**
