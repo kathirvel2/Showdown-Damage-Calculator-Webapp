@@ -155,7 +155,7 @@ function calcMove(moveName){
 
 /* =================== COMBOBOX ENGINE =================== */
 let openCombo = null;
-function closeCombo(){ if(openCombo){ openCombo.pop.remove(); openCombo.trigger.classList.remove("open"); document.removeEventListener("mousedown", openCombo.outside, true); openCombo=null; } }
+function closeCombo(){ if(openCombo){ openCombo.pop.remove(); openCombo.trigger.classList.remove("open"); document.removeEventListener("mousedown", openCombo.outside, true); if(openCombo.onWin){ window.removeEventListener("resize", openCombo.onWin); window.removeEventListener("scroll", openCombo.onWin, true); } openCombo=null; } }
 
 function comboConfig(type){
   switch(type){
@@ -213,7 +213,7 @@ function openComboFor(trigger){
   const pop = document.createElement("div");
   pop.className = "combo-pop glass";
   pop.innerHTML = `
-    ${cfg.ph!==null?`<div class="combo-search-wrap"><span class="combo-search-ico">🔍</span><input class="combo-search" placeholder="${cfg.ph}"></div>`:""}
+    ${cfg.ph!==null?`<div class="combo-search-wrap"><span class="combo-search-ico">🔍</span><input class="combo-search" placeholder="${cfg.ph}" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"></div>`:""}
     <div class="combo-list"></div>
     <div class="combo-count"></div>`;
   document.body.appendChild(pop);
@@ -259,8 +259,15 @@ function openComboFor(trigger){
     pop.style.top = (below < ph+12 && r.top > below) ? Math.max(8, r.top - ph - 6)+"px" : (r.bottom + 6)+"px";
   }
   const outside = (e)=>{ if(!pop.contains(e.target) && !trigger.contains(e.target)) closeCombo(); };
-  document.addEventListener("mousedown", outside, true);
-  openCombo = { pop, trigger, outside };
+  // Defer attaching the outside-click listener so the click that OPENED the
+  // dropdown can never immediately close it (fixes "appears and closes" in embeds).
+  setTimeout(()=>{ if(openCombo && openCombo.pop===pop) document.addEventListener("mousedown", outside, true); }, 0);
+  // Reposition (NOT close) on resize/scroll — focusing the search box can fire a
+  // resize from the mobile keyboard/panel reflow, which previously closed it instantly.
+  const onWin = ()=>{ if(openCombo && openCombo.pop===pop) position(); };
+  window.addEventListener("resize", onWin);
+  window.addEventListener("scroll", onWin, true);
+  openCombo = { pop, trigger, outside, onWin, openedAt: Date.now() };
 }
 
 /* trigger HTML generators */
@@ -483,7 +490,12 @@ function fallbackCopy(text){
 
 /* =================== WIRING =================== */
 function wire(){
-  document.querySelectorAll(".combo-trigger").forEach(el=>el.addEventListener("click",()=>{ if(el.classList.contains("open")) closeCombo(); else openComboFor(el); }));
+  document.querySelectorAll(".combo-trigger").forEach(el=>el.addEventListener("click",()=>{
+    const isOpen = openCombo && openCombo.trigger===el;
+    // only allow toggle-close after a short grace period to ignore duplicate/ghost events
+    if(isOpen){ if(Date.now()-(openCombo.openedAt||0) > 200) closeCombo(); }
+    else openComboFor(el);
+  }));
   byId("theme-btn").onclick=()=>document.documentElement.classList.toggle("dark");
   byId("fld-gravity").onchange=e=>{state.field.isGravity=e.target.checked;renderResults();};
   byId("swap-btn").onclick=()=>{ const a=state.atk,d=state.def; state.atk=d; state.def=a; const sa=state.sides.atk; state.sides.atk=state.sides.def; state.sides.def=sa; render(); renderResults(); toast("Swapped sides"); };
@@ -506,7 +518,6 @@ function wire(){
   }));
 }
 const byId=id=>document.getElementById(id);
-window.addEventListener("resize", closeCombo);
 
 /* =================== BOOT =================== */
 loadGen(); render(); renderResults();
